@@ -43,7 +43,7 @@ The Task Manager APP includes the following key features:
   following command to clone and change the working directory into the root of this project:
 
 ```sh
-[https://github.com/scholasticstan/Task-Scheduling-Application]
+[https://github.com/scholasticstan/task-schedule-app]
 ```
 
 - Otherwise, clone the repository as you'd like and change the working directory into
