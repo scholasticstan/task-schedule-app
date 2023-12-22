@@ -1,4 +1,4 @@
-# Task Manager Application
+# Task Schedule App
 
 alx final project
 
@@ -60,7 +60,7 @@ The Task Manager APP includes the following key features:
 
 ## Usage
 
-1. **Create Account in Task Manager Application:**
+1. **Create Account in Task Schedule App:**
 
    - when you run this app you find login page
    - Click on “Sigin in now ” and you will be directed to the Sign in section form
