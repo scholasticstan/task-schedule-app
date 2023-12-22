@@ -1,0 +1,306 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container-fluid page-body-wrapper">
+  <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+      <li class="nav-item nav-profile">
+        <a href="#" class="nav-link">
+          <div class="nav-profile-image">
+            <img src="/static/images/user.png" alt="profile" />
+            <span class="login-status online"></span>
+          </div>
+          <div class="nav-profile-text d-flex flex-column">
+            <span class="font-weight-bold mb-2">{{user.name}}</span>
+          </div>
+          <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('get_task', user_id=user_id)}}">
+          <span class="menu-title">TASKS</span>
+          <i class="mdi mdi-home menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('add_task', user_id=user_id) }}">
+          <span class="menu-title">ADD TASK</span>
+          <i class="mdi mdi-note-plus menu-icon"></i>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('edit_user', user_id=user_id) }}">
+          <span class="menu-title">Profile</span>
+          <i class="mdi mdi-account-edit menu-icon"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- partial -->
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="page-header">
+        <h3 class="page-title">
+          <span class="page-title-icon bg-gradient-primary text-white me-2">
+            <i class="mdi mdi-note-text"></i>
+          </span>
+          TASKS
+        </h3>
+        <nav aria-label="breadcrumb">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+              <span></span> {% with messages =
+              get_flashed_messages(with_categories=true) %} {% if messages %}
+              <div class="alert">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              </div>
+              {% endif %} {% endwith %}
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="row">
+        {% for task in tasks %}
+
+        <div class="col-md-4 stretch-card grid-margin">
+          <div class="card bg-gradient-secondary card-img-holder text-white">
+            <div class="card-item media center">
+              <div class="card-body">
+                <input type="checkbox" name="status" class="size" id="checkComplete">
+
+                <h3 class="font-weight-normal mb-3">
+                  <i class="mdi mdi-alert-circle-outline mdi-24px float-right"></i>
+                  {{task.name}}
+                </h3>
+
+                <br>
+                <h4 class="mb-5">
+                  <i class="mdi mdi-camera-timer mdi-24px float-right"></i>
+                  Remaining Time:
+                  <span class="error-message" id="countdownTimer_{{ task.id }}"></span>
+                </h4>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="card-text">Start Date: {{task.start_date}}</h6>
+                <h6 class="card-text">Status: {{task.status}}</h6>
+
+                <h6 class="card-text">Tim: {{task.stop_time}}</h6>
+              </div>
+              <div class="col-md-6">
+                <h6 class="card-text">End Date: {{task.end_date}}</h6>
+                <h6 class="card-text">Priority: {{task.priority}}</h6>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-lg-3">
+
+                <div class="card-item media"> <i class="fa fa-clock media-left media-right-margin color"></i>
+                  <div class="media-body">
+                    <p><strong>Time</strong> {{task.stop_time}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="card-item media"> <i class="fa fa-arrow-circle-up media-left media-right-margin color"></i>
+                  <div class="media-body">
+                    <p><strong> Proiarty</strong> {{task.priority}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="card-item media"> <i
+                    class=" fa fa-exclamation-circle  media-left media-right-margin color"></i>
+                  <div class="media-body">
+                    <p><strong>Status</strong> {{task.status}}</p>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="row " id="btnDiv">
+              <div class="col-md-6">
+                <a href="{{ url_for('edit_task', task_id=task.id) }}">
+                  <button type="submit" name="button" class="btn btn-gradient-success btn-rounded mr-2">
+                    <i class="mdi mdi-pencil"></i> Edit 
+                  </button></a>
+              </div>
+              <div class="col-md-6">
+                <a href="{{ url_for('delete_task', task_id=task.id) }}">
+                  <button type="submit" name="button" class="btn btn-gradient-danger btn-rounded mr-2">
+                    <i class="mdi mdi-delete"></i> Delete 
+                  </button></a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- {% for task in tasks %}
+        <div class="col-md-4 stretch-card grid-margin">
+          <div class="card bg-gradient-secondary card-img-holder text-white">
+            <div class="card-body">
+              <img
+                src="/static/images/circle.png"
+                class="card-img-absolute"
+                alt="circle-image"
+              />
+              <input
+                type="checkbox"
+                name="status"
+                class="size"
+                id="checkComplete"
+              />
+
+              <h4 class="font-weight-normal mb-3">
+                <i
+                  class="mdi mdi-alert-circle-outline mdi-24px float-right"
+                ></i>
+                {{task.name}}
+              </h4>
+              <h3 class="mb-5">
+                <i class="mdi mdi-camera-timer mdi-24px float-right"></i>
+                Remaining Time:
+                <span
+                  class="error-message"
+                  id="countdownTimer_{{ task.id }}"
+                ></span>
+              </h3>
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="card-text">Start Date: {{task.start_date}}</h6>
+                  <h6 class="card-text">Status: {{task.status}}</h6>
+
+                  <h6 class="card-text">Tim: {{task.stop_time}}</h6>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="card-text">End Date: {{task.end_date}}</h6>
+                  <h6 class="card-text">Priority: {{task.priority}}</h6>
+                </div>
+              </div>
+             <div class="row" id="btnDiv">
+    <div class="col-md-6">
+        <a href="{{ url_for('edit_task', task_id=task.id) }}">
+            <button
+                type="button"
+                class="btn btn-gradient-primary btn-rounded btn-fw p-20 m-20"
+                id="editButton"
+                
+            >
+                Edit
+            </button>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="{{ url_for('delete_task', task_id=task.id) }}">
+            <button
+                type="button"
+                class="btn btn-gradient-danger btn-rounded btn-fw p-20 m-20"
+                style="margin-right: 10px;margin-bottom: 10px;"
+
+            >
+                Delete
+            </button>
+        </a>
+    </div>
+</div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %} -->
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+<script>
+  function updateCountdownTimer(taskId, endDate, stopTime) {
+    // Get the current time
+    var now = new Date().getTime();
+
+    // Get the task's end date and time
+    var taskEndDate = new Date(endDate + " " + stopTime).getTime();
+
+    // Calculate the time remaining in milliseconds
+    var timeRemaining = taskEndDate - now;
+
+    // Check if the task has already ended
+    if (timeRemaining <= 0) {
+      document.getElementById("countdownTimer_" + taskId).innerHTML = "Task completed";
+      document.getElementById("taskCard_" + taskId).style.backgroundColor = "black"; // Change background color to black
+      return;
+    }
+
+    // Calculate the remaining hours, minutes, and seconds
+    var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+    // Format the time as a countdown clock
+    var formattedTime = hours.toString().padStart(2, "0") + ":" +
+      minutes.toString().padStart(2, "0") + ":" +
+      seconds.toString().padStart(2, "0");
+
+    // Update the countdown timer element for the specific task
+    var countdownTimerElement = document.getElementById("countdownTimer_" + taskId);
+    countdownTimerElement.innerHTML = formattedTime;
+
+    // Check if the timer has reached 0:0:0
+    if (hours == 0 && minutes == 0 && seconds == 0) {
+      countdownTimerElement.innerHTML = "Time Pass";
+      document.getElementById("taskCard_" + taskId).style.backgroundColor = "black"; // Change background color to black
+      return;
+    }
+
+    // Call the function again after 1 second
+    setTimeout(function () {
+      updateCountdownTimer(taskId, endDate, stopTime);
+    }, 1000);
+  }
+
+  // Call the updateCountdownTimer function for each task
+  <!-- {% for task in tasks %}
+    updateCountdownTimer("{{ task.id }}", "{{ task.end_date }}", "{{ task.stop_time }}");
+  {% endfor %} -->
+</script>
+<script>
+  // Get all the checkboxes with the name "status"
+  const checkbox = document.getElementById("checkComplete");
+  const btnDiv = document.getElementById("btnDiv");
+
+  checkbox.addEventListener("change", function () {
+    if (checkbox.checked) {
+      // btnDiv.style.display = 'none'; // Hide the btnDiv
+      btnDiv.classList.add("dis");
+    } else {
+      // btnDiv.style.display = 'block'; // Show the btnDiv
+      btnDiv.classList.remove("dis");
+    }
+  });
+</script>
+<script>
+  // Get a reference to the button element
+  var editButton = document.getElementById('editButton');
+
+  // Add a click event listener to the button
+  editButton.addEventListener('click', function () {
+    // Perform the desired action here
+    alert('Edit button clicked!');
+    // You can also redirect to a URL using window.location.href
+    // window.location.href = '/edit';
+  });
+</script>
+
+<!-- End custom js for this page -->
+{% endblock %}

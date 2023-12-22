@@ -1,0 +1,151 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- partial -->
+<div class="container-fluid page-body-wrapper">
+  <!-- partial:../../partials/_sidebar.html -->
+  <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+      <li class="nav-item nav-profile">
+        <a href="#" class="nav-link">
+          <div class="nav-profile-image">
+            <img src="/static/images/user.png" alt="profile" />
+            <span class="login-status online"></span>
+            <!--change to offline or busy as needed-->
+          </div>
+          <div class="nav-profile-text d-flex flex-column">
+            <span class="font-weight-bold mb-2"> {{user.name}}</span>
+          </div>
+          <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('get_task', user_id=user.id)}}">
+          <span class="menu-title">TASKS</span>
+          <i class="mdi mdi-home menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('add_task', user_id=user.id) }}">
+          <span class="menu-title">ADD TASK</span>
+          <i class="mdi mdi-note-plus menu-icon"></i>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('edit_user', user_id=user.id) }}">
+          <span class="menu-title">Profile</span>
+          <i class="mdi mdi-account-edit menu-icon"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- partial -->
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">UPDATE PROFILE</h4>
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %}
+            <div class="alert">
+              {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+            {% endif %} {% endwith %}
+            <form
+              class="form-sample"
+              id="task_form"
+              action="http://127.0.0.1:5000/update_user/{{user.id}}"
+              method="POST"
+              onsubmit="return validateForm()"
+            >
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">First Name</label>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="user_name"
+                        value="{{ user.name }}"
+                        name="name"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Email</label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="user_email"
+                          value="{{ user.email }}"
+                          name="email"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Password</label>
+                      <div class="col-sm-9">
+                        <input
+                          type="password"
+                          id="user_password"
+                          class="form-control"
+                          name="password"
+                          placeholder=" "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Confirm </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="password"
+                          id="confirm_password"
+                          class="form-control"
+                          name="confirm_password"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- add button add task and cancel -->
+              <button
+                type="submit"
+                name="button"
+                class="btn btn-gradient-success btn-rounded mr-2"
+              >
+                <i class="mdi mdi-pencil"></i> Update
+              </button>
+              <button
+                type="submit"
+                name="button"
+                class="btn btn-gradient-danger btn-rounded mr-2"
+              >
+                <i class="mdi mdi-window-close"></i> Cancel
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+</div>

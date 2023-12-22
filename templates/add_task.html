@@ -1,0 +1,219 @@
+{% extends "base.html" %} {% block content %}
+
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_sidebar.html -->
+
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+        <li class="nav-item nav-profile">
+          <a href="#" class="nav-link">
+            <div class="nav-profile-image">
+              <img src="/static/images/user.png" alt="profile" />
+              <span class="login-status online"></span>
+              <!--change to offline or busy as needed-->
+            </div>
+            <div class="nav-profile-text d-flex flex-column">
+              <span class="font-weight-bold mb-2">{{user_name}}</span>
+
+            </div>
+            <i
+              class="mdi mdi-bookmark-check text-success nav-profile-badge"
+            ></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('get_task', user_id=user_id)}}">
+            <span class="menu-title">TASKS</span>
+            <i class="mdi mdi-home menu-icon"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('add_task', user_id=user_id) }}">
+            <span class="menu-title">ADD TASK</span>
+            <i class="mdi mdi-note-plus menu-icon"></i>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="{{ url_for('edit_user', user_id=user_id) }}"
+          >
+            <span class="menu-title">Profile</span>
+            <i class="mdi mdi-account-edit menu-icon"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="col-12">
+          <div class="card">
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %}
+            <div class="alert">
+              {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+            {% endif %} {% endwith %}
+            <div class="card-body">
+              <h4 class="card-title">ADD NEW TASK</h4>
+              <form
+                id="task_form"
+                class="form-sample"
+                action="{{ url_for('create_task', user_id=user_id) }}"
+                method="POST"
+              >
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Task Name</label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          name="name"
+                          placeholder="Task Name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Start Date:</label>
+                      <div class="col-sm-9">
+                        <input
+                          type="date"
+                          id="start_date"
+                          class="form-control"
+                          name="start_date"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">End Date:</label>
+                      <div class="col-sm-9">
+                        <input
+                          type="date"
+                          id="end_date"
+                          class="form-control"
+                          name="end_date"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Stop Time</label>
+                      <div class="col-sm-9">
+                        <input
+                          type="time"
+                          id="stop_time"
+                          class="form-control"
+                          name="stop_time"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-3 col-form-label">Status</label>
+                      <div class="col-sm-9">
+                        <select id="status" name="status" class="form-control">
+                          <option value="pending" class="text-warning">
+                            Pending
+                          </option>
+                          <option value="active" class="text-success">
+                            Active
+                          </option>
+                          <option value="completed" class="text-primary">
+                            Completed
+                          </option>
+                          <option value="abort" class="text-danger">
+                            Abort
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group row">
+                      <label class="col-sm-2 col-form-label">Priority:</label>
+                      <div class="col-sm-2">
+                        <div class="form-check">
+                          <label class="form-check-label text-primary">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              name="priority"
+                              value="low"
+                              checked
+                            />
+                            LOW
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="form-check">
+                          <label class="form-check-label text-success">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              name="priority"
+                              value="meduim"
+                            />
+                            Medium
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="form-check">
+                          <label class="form-check-label text-danger">
+                            <input
+                              type="radio"
+                              class="form-check-input"
+                              name="priority"
+                              value="high"
+                            />
+                            High
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- add button add task and cancel -->
+                <button
+                  type="submit"
+                  name="button"
+                  class="btn btn-gradient-primary btn-rounded mr-2"
+                >
+                  <i class="mdi mdi-plus-circle-outline"></i> Add Task
+                </button>
+                <button class="btn btn-gradient-danger btn-rounded mr-2">
+                  <i class="mdi mdi-window-close"></i> Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% block scripts %}
+      <script src="/static/js/taskValidation.js"></script>
+      {% endblock %} {% endblock %}
+    </div>
+  </div>
+</div>
